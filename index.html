@@ -52,7 +52,7 @@
             background-color: var(--flash-color, var(--accent)) !important;
         }
 
-        canvas {
+        #patchbayCanvas {
             position: absolute;
             top: 0;
             left: 0;
@@ -147,30 +147,10 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
-        .safety-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #FF5722;
-        }
-
-        .safety-card h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            letter-spacing: -0.5px;
-        }
-
-        .safety-card p {
-            color: #A1A1A1;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        .safety-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-        }
+        .safety-icon { font-size: 3rem; margin-bottom: 1rem; color: #FF5722; }
+        .safety-card h2 { font-size: 1.8rem; margin-bottom: 1rem; letter-spacing: -0.5px; }
+        .safety-card p { color: #A1A1A1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; }
+        .safety-buttons { display: flex; gap: 1.5rem; justify-content: center; }
 
         .safety-btn {
             padding: 1rem 1.8rem;
@@ -181,7 +161,6 @@
             cursor: pointer;
             transition: transform 0.1s;
         }
-
         .safety-btn:active { transform: scale(0.95); }
         .btn-danger { background: #FF5722; color: white; }
         .btn-safe { background: #2a2c2e; color: white; border: 2px solid rgba(255,255,255,0.1); }
@@ -225,7 +204,7 @@
             border-radius: 8px;
             font-size: 0.9rem;
             box-shadow: inset 0 0 12px rgba(0,255,0,0.4);
-            min-width: 340px;
+            min-width: 360px;
             text-align: center;
             font-weight: bold;
             line-height: 1.5;
@@ -249,6 +228,8 @@
             flex-direction: column;
             gap: 1.2rem;
             align-items: center;
+            position: relative;
+            z-index: 10; /* Ensure sockets sit cleanly above the line layer */
         }
 
         .jack-label {
@@ -317,7 +298,16 @@
         .toy-card .status-tag { display: inline-block; margin-top: 1.5rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--card-color); }
 
         footer { padding: 2.5rem; text-align: center; font-size: 0.9rem; color: var(--text-muted); border-top: 2px solid var(--border); width: 100%; }
-        #cableCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+        
+        #cableCanvas { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 5; 
+            pointer-events: none; 
+        }
 
         @media (max-width: 850px) {
             h1 { font-size: 2.8rem; }
@@ -487,19 +477,30 @@
         let connections = {}; // maps outId string -> inId string
         let mouseX = 0, mouseY = 0;
 
-        // Challenge state definitions
-        let challengeType = ""; // "DIRECT", "SHIFT", "INVERT", "BRIDGE"
-        let activeRequirements = []; // array of {out: X, in: Y} maps that must be concurrently met
+        let challengeType = ""; 
+        let activeRequirements = []; 
 
         const outMapLabels = { '1':'A', '2':'B', '3':'C', '4':'D', '5':'E', '6':'F' };
         const inMapLabels = { '1':'U', '2':'V', '3':'W', '4':'X', '5':'Y', '6':'Z' };
 
+        function resizeCableCanvas() {
+            cableCanvas.width = patchbay.clientWidth;
+            cableCanvas.height = patchbay.clientHeight;
+        }
+        window.addEventListener('resize', resizeCableCanvas);
+        resizeCableCanvas();
+
         function generateNewChallenge() {
+            // Detach styling from sockets cleanly when wiping past levels
+            document.querySelectorAll('.jack-node').forEach(n => {
+                n.classList.remove('connected');
+                if (n.getAttribute('data-type') === 'in') {
+                    n.style.setProperty('--node-color', 'var(--text-muted)');
+                }
+            });
             connections = {};
-            document.querySelectorAll('.jack-node').forEach(n => n.classList.remove('connected'));
             displayScreen.classList.remove('complete');
 
-            // Set up conditions based on progress depth
             const variants = ["DIRECT", "SHIFT", "INVERT", "BRIDGE"];
             challengeType = variants[Math.floor(Math.random() * variants.length)];
             activeRequirements = [];
@@ -513,7 +514,6 @@
             else if (challengeType === "SHIFT") {
                 const o = Math.floor(Math.random() * 6) + 1;
                 const shiftValue = Math.random() > 0.5 ? 1 : 2;
-                // Bound check shift value parameters
                 let targetIn = o + shiftValue;
                 if (targetIn > 6) targetIn = targetIn - 6;
 
@@ -522,22 +522,33 @@
             } 
             else if (challengeType === "INVERT") {
                 const o = Math.floor(Math.random() * 6) + 1;
-                const invertedIn = 7 - o; // Mirror across standard line axes
+                let targetIn = 7 - o;
 
-                activeRequirements.push({ out: String(o), in: String(invertedIn) });
+                activeRequirements.push({ out: String(o), in: String(targetIn) });
                 displayScreen.innerHTML = `STAGE ${currentStage}/${totalStages}<br>ROUTE OPERATOR: INVERT REFLECTION ON BANK ${outMapLabels[o]}`;
             }
             else if (challengeType === "BRIDGE") {
-                // Must map two wires concurrently
-                const o1 = "1", i1 = "3";
-                const o2 = "6", i2 = "4";
+                // Generates two random separate lines that must remain plugged in concurrently
+                const o1 = "2"; const i1 = "2"; // Bank B to V
+                const o2 = "5"; const i2 = "6"; // Bank E to Z
                 activeRequirements.push({ out: o1, in: i1 });
                 activeRequirements.push({ out: o2, in: i2 });
-                displayScreen.innerHTML = `STAGE ${currentStage}/${totalStages}<br>🚧 DUAL BRIDGE: [A ➔ W] AND [F ➔ X] SIMULTANEOUSLY`;
+                displayScreen.innerHTML = `STAGE ${currentStage}/${totalStages}<br>🚧 DUAL BRIDGE: [B ➔ V] AND [E ➔ Z] SIMULTANEOUSLY`;
             }
         }
 
-        // Mouse routing linkage events
+        // --- PERFECTED POSITION MAPPING PHYSICS ---
+        function getNodeCenter(node) {
+            const nodeRect = node.getBoundingClientRect();
+            const bayRect = patchbay.getBoundingClientRect();
+            
+            // Calculate coordinates completely relative to parent container frame boundaries
+            return {
+                x: (nodeRect.left - bayRect.left) + (nodeRect.width / 2),
+                y: (nodeRect.top - bayRect.top) + (nodeRect.height / 2)
+            };
+        }
+
         document.querySelectorAll('.jack-node').forEach(node => {
             node.addEventListener('mousedown', (e) => {
                 if (currentStage > totalStages) return;
@@ -546,8 +557,14 @@
 
                 if (type === 'out') {
                     activeNode = node;
+                    
+                    // If you tap an output socket that is already mapped, clear it out to let user rebuild line
                     if (connections[id]) {
-                        document.getElementById(`in-${connections[id]}`).classList.remove('connected');
+                        const companionIn = document.getElementById(`in-${connections[id]}`);
+                        if (companionIn) {
+                            companionIn.classList.remove('connected');
+                            companionIn.style.setProperty('--node-color', 'var(--text-muted)');
+                        }
                         delete connections[id];
                     }
                     node.classList.remove('connected');
@@ -576,7 +593,6 @@
         });
 
         function verifyMatrixSolution() {
-            // Check if every single current cryptographic criteria object matches active map
             let stagePassed = true;
             activeRequirements.forEach(req => {
                 if (connections[req.out] !== req.in) {
@@ -597,7 +613,7 @@
         }
 
         function executeSensoryFeedback(color) {
-            if (!allowGlitches) return; // Cut strobe loops if requested
+            if (!allowGlitches) return; 
             body.style.setProperty('--flash-color', color.replace(')', ', 0.12)'));
             body.classList.add('glitch-flash');
             setTimeout(() => body.classList.remove('glitch-flash'), 90);
@@ -610,9 +626,8 @@
             document.getElementById('mainHeadline').innerHTML = "Welcome To The <span class='pink'>Patch</span><span class='blue'>box</span>.";
             document.getElementById('mainDesc').innerHTML = "MATRIX SOLVED. Creative engineering hub initialization complete. All production modules fully unboxed.";
 
-            // Run explosion particle arrays safely
             const rect = patchbay.getBoundingClientRect();
-            const maxSparks = allowGlitches ? 120 : 30; // Scale intensity down based on accessibility
+            const maxSparks = allowGlitches ? 120 : 30; 
             for (let i = 0; i < maxSparks; i++) {
                 setTimeout(() => {
                     particles.push(new Particle(
@@ -631,10 +646,11 @@
         });
 
         window.addEventListener('mouseup', () => { activeNode = null; });
-        function getNodeCenter(node) { return { x: node.offsetLeft + node.clientWidth / 2, y: node.offsetTop + node.clientHeight / 2 }; }
 
         function drawCables() {
             cCtx.clearRect(0, 0, cableCanvas.width, cableCanvas.height);
+            
+            // Loop over all active dictionary lines to render multiple paths concurrently
             Object.keys(connections).forEach(outId => {
                 const outNode = document.getElementById(`out-${outId}`);
                 const inNode = document.getElementById(`in-${connections[outId]}`);
@@ -642,6 +658,8 @@
                     drawPhysicsWire(getNodeCenter(outNode), getNodeCenter(inNode), window.getComputedStyle(outNode).getPropertyValue('--node-color'));
                 }
             });
+
+            // Live line trace while dragging active patchcord
             if (activeNode) {
                 drawPhysicsWire(getNodeCenter(activeNode), { x: mouseX, y: mouseY }, window.getComputedStyle(activeNode).getPropertyValue('--node-color'));
             }
@@ -649,12 +667,19 @@
         }
 
         function drawPhysicsWire(start, end, color) {
-            cCtx.beginPath(); cCtx.moveTo(start.x, start.y);
+            cCtx.beginPath(); 
+            cCtx.moveTo(start.x, start.y);
+            
+            // Generate standard droop curve math variables
             const controlY = Math.max(start.y, end.y) + 45;
             cCtx.quadraticCurveTo((start.x + end.x) / 2, controlY, end.x, end.y);
-            cCtx.strokeStyle = color; cCtx.lineWidth = 5; cCtx.lineCap = 'round';
+            
+            cCtx.strokeStyle = color; 
+            cCtx.lineWidth = 5; 
+            cCtx.lineCap = 'round';
             if (allowGlitches) {
-                cCtx.shadowBlur = 6; cCtx.shadowColor = color;
+                cCtx.shadowBlur = 6; 
+                cCtx.shadowColor = color;
             }
             cCtx.stroke();
         }
