@@ -15,6 +15,7 @@
             --toy-blue: #A9DEF9;
             --toy-yellow: #E4FF1A;
             --toy-purple: #CC99FF;
+            --toy-green: #33ff33;
             --border: rgba(255, 255, 255, 0.1);
         }
 
@@ -92,20 +93,17 @@
             cursor: pointer;
             font-weight: 700;
             font-size: 0.85rem;
-            transition: transform 0.1s, background-color 0.3s;
         }
 
-        .theme-toggle:active { transform: scale(0.95); }
-
         main {
-            max-width: 1000px;
+            max-width: 1100px;
             width: 100%;
             margin: auto;
             padding: 2rem;
             text-align: center;
         }
 
-        .tagline-container { margin-bottom: 3rem; }
+        .tagline-container { margin-bottom: 2.5rem; }
 
         h1 {
             font-size: 4rem;
@@ -115,8 +113,8 @@
             margin-bottom: 1.5rem;
         }
 
-        h1 span.pink { color: var(--toy-pink); text-shadow: 0 0 15px rgba(255,153,200,0.3); }
-        h1 span.blue { color: var(--toy-blue); text-shadow: 0 0 15px rgba(169,222,249,0.3); }
+        h1 span.pink { color: var(--toy-pink); }
+        h1 span.blue { color: var(--toy-blue); }
 
         p.description {
             font-size: 1.35rem;
@@ -126,15 +124,77 @@
             line-height: 1.6;
         }
 
-        /* --- HARWARE INTERACTIVE GAME SYSTEM --- */
+        /* --- SENSORY SCREENING SAFETY MODAL --- */
+        .safety-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #0d0e0f;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .safety-card {
+            background: #1c1e20;
+            border: 3px solid rgba(255, 87, 34, 0.3);
+            border-radius: 28px;
+            padding: 3rem;
+            max-width: 550px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .safety-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #FF5722;
+        }
+
+        .safety-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .safety-card p {
+            color: #A1A1A1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .safety-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .safety-btn {
+            padding: 1rem 1.8rem;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .safety-btn:active { transform: scale(0.95); }
+        .btn-danger { background: #FF5722; color: white; }
+        .btn-safe { background: #2a2c2e; color: white; border: 2px solid rgba(255,255,255,0.1); }
+
+        /* --- HARDWARE CHALLENGE PLATFORM (6x6) --- */
         .hardware-patchbay {
             background: var(--panel);
             border: 3px solid var(--border);
             box-shadow: 0 16px 0 var(--border);
             border-radius: 24px;
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             margin: 2rem auto 4rem auto;
-            max-width: 700px;
+            max-width: 800px;
             position: relative;
             z-index: 4;
         }
@@ -144,8 +204,8 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px dashed var(--border);
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
+            padding-bottom: 1.2rem;
+            margin-bottom: 2rem;
         }
 
         .hardware-title {
@@ -160,27 +220,34 @@
         .hardware-status-display {
             font-family: monospace;
             background: #000000;
-            color: #33ff33;
-            padding: 0.4rem 1rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            box-shadow: inset 0 0 10px rgba(0,255,0,0.5);
-            min-width: 220px;
-            text-align: left;
+            color: var(--toy-green);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            box-shadow: inset 0 0 12px rgba(0,255,0,0.4);
+            min-width: 340px;
+            text-align: center;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .hardware-status-display.complete {
+            color: var(--toy-pink);
+            box-shadow: inset 0 0 12px rgba(255,153,200,0.6);
         }
 
         .jack-matrix {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            margin-top: 1.5rem;
+            margin-top: 1rem;
             position: relative;
         }
 
         .jack-column {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.2rem;
             align-items: center;
         }
 
@@ -189,130 +256,68 @@
             font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .jack-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .node-tag {
+            font-family: monospace;
+            font-size: 0.85rem;
+            font-weight: bold;
+            background: rgba(0,0,0,0.2);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
         }
 
         .jack-node {
-            width: 44px;
-            height: 44px;
-            background: #2a2c2e;
-            border: 4px solid #4a4d50;
+            width: 42px;
+            height: 42px;
+            background: #232526;
+            border: 4px solid #414447;
             border-radius: 50%;
             cursor: pointer;
             position: relative;
-            box-shadow: inset 0 4px 6px rgba(0,0,0,0.6), 0 4px 0 rgba(0,0,0,0.2);
-            transition: transform 0.1s;
+            box-shadow: inset 0 4px 6px rgba(0,0,0,0.6), 0 3px 0 rgba(0,0,0,0.2);
         }
-
-        .jack-node:active { transform: scale(0.95); }
 
         .jack-node::after {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-25%, -25%);
-            width: 14px;
-            height: 14px;
-            background: #111;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px; height: 12px;
+            background: #0f1011;
             border-radius: 50%;
         }
 
         .jack-node.connected {
-            border-color: var(--node-color, var(--accent));
-            box-shadow: 0 0 12px var(--node-color, var(--accent)), inset 0 2px 4px rgba(0,0,0,0.8);
+            border-color: var(--node-color, var(--accent)) !important;
+            box-shadow: 0 0 15px var(--node-color, var(--accent)), inset 0 2px 4px rgba(0,0,0,0.8) !important;
         }
 
         /* --- TOY BOX GRID --- */
-        .toy-box-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            perspective: 1000px;
-        }
+        .toy-box-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .toy-card { background: var(--panel); border: 3px solid var(--border); border-radius: 24px; padding: 2rem; text-align: left; cursor: pointer; box-shadow: 0 8px 0 var(--border); transition: border-color 0.2s, transform 0.2s; }
+        .toy-card:hover { border-color: var(--card-color); box-shadow: 0 12px 0 var(--card-color); }
+        .card-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--card-color); margin-bottom: 1.5rem; }
+        .toy-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.75rem; }
+        .toy-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
+        .toy-card .status-tag { display: inline-block; margin-top: 1.5rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--card-color); }
 
-        .toy-card {
-            background: var(--panel);
-            border: 3px solid var(--border);
-            border-radius: 24px;
-            padding: 2rem;
-            text-align: left;
-            cursor: pointer;
-            position: relative;
-            transition: border-color 0.2s, background-color 0.3s;
-            box-shadow: 0 8px 0 var(--border);
-        }
-
-        .toy-card:nth-child(1) { transform: rotateZ(-1deg); }
-        .toy-card:nth-child(2) { transform: rotateZ(1deg); }
-        .toy-card:nth-child(3) { transform: rotateZ(-0.5deg); }
-
-        .toy-card:hover {
-            border-color: var(--card-color);
-            box-shadow: 0 12px 0 var(--card-color);
-        }
-
-        .toy-card:active {
-            box-shadow: 0 2px 0 var(--card-color) !important;
-            transform: translateY(8px) scale(0.98) !important;
-        }
-
-        @keyframes cardShake {
-            0%, 100% { transform: translate(0, 0); }
-            20% { transform: translate(-3px, 1px); }
-            40% { transform: translate(3px, -1px); }
-            60% { transform: translate(-2px, -2px); }
-            80% { transform: translate(2px, 2px); }
-        }
-
-        .card-dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: var(--card-color);
-            margin-bottom: 1.5rem;
-            box-shadow: 0 0 10px var(--card-color);
-        }
-
-        .toy-card h3 {
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 0.75rem;
-        }
-
-        .toy-card p {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .toy-card .status-tag {
-            display: inline-block;
-            margin-top: 1.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--card-color);
-        }
-
-        footer {
-            padding: 2.5rem;
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            border-top: 2px solid var(--border);
-            width: 100%;
-        }
-
-        /* Dedicated patch cable drawing canvas layers */
-        #cableCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-            pointer-events: none;
-        }
+        footer { padding: 2.5rem; text-align: center; font-size: 0.9rem; color: var(--text-muted); border-top: 2px solid var(--border); width: 100%; }
+        #cableCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
 
         @media (max-width: 850px) {
             h1 { font-size: 2.8rem; }
@@ -321,6 +326,18 @@
     </style>
 </head>
 <body data-theme="dark">
+
+    <div class="safety-overlay" id="safetyModal">
+        <div class="safety-card">
+            <div class="safety-icon">⚠️</div>
+            <h2>SENSORY DISCLOSURE DETECTED</h2>
+            <p>This terminal includes highly interactive visual environments, reactive flashing patterns, and computational grid strobes upon successful logic breaches. Choose your preference.</p>
+            <div class="safety-buttons">
+                <button class="safety-btn btn-danger" onclick="setSensoryMode(true)">Keep Flashes On</button>
+                <button class="safety-btn btn-safe" onclick="setSensoryMode(false)">Turn Off Strobes</button>
+            </div>
+        </div>
+    </div>
 
     <canvas id="patchbayCanvas"></canvas>
 
@@ -331,30 +348,36 @@
 
     <main>
         <div class="tagline-container">
-            <h1>Part Design Studio.<br>Part Digital <span class="pink">Toy</span><span class="blue">box</span>.</h1>
-            <p class="description">We break traditional web constraints. Route the physical logic bay below to modify core system streams.</p>
+            <h1 id="mainHeadline">Part Design Studio.<br>Part Digital <span class="pink">Toy</span><span class="blue">box</span>.</h1>
+            <p class="description" id="mainDesc">Decode the 6x6 matrix operators. Solve nested cryptographic logic pipelines to advance authorization depth.</p>
         </div>
 
         <div class="hardware-patchbay">
             <canvas id="cableCanvas"></canvas>
             <div class="hardware-header">
-                <div class="hardware-title">🕹️ Hardware Matrix V1.0</div>
-                <div class="hardware-status-display" id="systemStatus">STATUS: DISCONNECTED</div>
+                <div class="hardware-title">📟 MODULAR CRYPTO DECK V2.0</div>
+                <div class="hardware-status-display" id="systemStatus">AWAITING DECISION SECURITY CLEARANCE...</div>
             </div>
             
             <div class="jack-matrix">
                 <div class="jack-column">
-                    <div class="jack-label">Output Nodes</div>
-                    <div class="jack-node" id="out-1" style="--node-color: var(--toy-pink);" data-type="out" data-id="1"></div>
-                    <div class="jack-node" id="out-2" style="--node-color: var(--toy-yellow);" data-type="out" data-id="2"></div>
-                    <div class="jack-node" id="out-3" style="--node-color: var(--toy-blue);" data-type="out" data-id="3"></div>
+                    <div class="jack-label">OUT BANKS</div>
+                    <div class="jack-container"><span class="node-tag">A</span><div class="jack-node" id="out-1" style="--node-color: var(--toy-pink);" data-type="out" data-id="1"></div></div>
+                    <div class="jack-container"><span class="node-tag">B</span><div class="jack-node" id="out-2" style="--node-color: var(--toy-yellow);" data-type="out" data-id="2"></div></div>
+                    <div class="jack-container"><span class="node-tag">C</span><div class="jack-node" id="out-3" style="--node-color: var(--toy-blue);" data-type="out" data-id="3"></div></div>
+                    <div class="jack-container"><span class="node-tag">D</span><div class="jack-node" id="out-4" style="--node-color: var(--toy-purple);" data-type="out" data-id="4"></div></div>
+                    <div class="jack-container"><span class="node-tag">E</span><div class="jack-node" id="out-5" style="--node-color: #FF5722;" data-type="out" data-id="5"></div></div>
+                    <div class="jack-container"><span class="node-tag">F</span><div class="jack-node" id="out-6" style="--node-color: #33ff33;" data-type="out" data-id="6"></div></div>
                 </div>
 
                 <div class="jack-column">
-                    <div class="jack-label">Input Ports</div>
-                    <div class="jack-node" id="in-1" style="--node-color: var(--toy-pink);" data-type="in" data-id="1"></div>
-                    <div class="jack-node" id="in-2" style="--node-color: var(--toy-yellow);" data-type="in" data-id="2"></div>
-                    <div class="jack-node" id="in-3" style="--node-color: var(--toy-blue);" data-type="in" data-id="3"></div>
+                    <div class="jack-label">IN PORTS</div>
+                    <div class="jack-container"><div class="jack-node" id="in-1" style="--node-color: var(--text-muted);" data-type="in" data-id="1"></div><span class="node-tag">U</span></div>
+                    <div class="jack-container"><div class="jack-node" id="in-2" style="--node-color: var(--text-muted);" data-type="in" data-id="2"></div><span class="node-tag">V</span></div>
+                    <div class="jack-container"><div class="jack-node" id="in-3" style="--node-color: var(--text-muted);" data-type="in" data-id="3"></div><span class="node-tag">W</span></div>
+                    <div class="jack-container"><div class="jack-node" id="in-4" style="--node-color: var(--text-muted);" data-type="in" data-id="4"></div><span class="node-tag">X</span></div>
+                    <div class="jack-container"><div class="jack-node" id="in-5" style="--node-color: var(--text-muted);" data-type="in" data-id="5"></div><span class="node-tag">Y</span></div>
+                    <div class="jack-container"><div class="jack-node" id="in-6" style="--node-color: var(--text-muted);" data-type="in" data-id="6"></div><span class="node-tag">Z</span></div>
                 </div>
             </div>
         </div>
@@ -363,17 +386,15 @@
             <div class="toy-card" style="--card-color: var(--toy-pink)" onclick="triggerToyEffects(event)">
                 <div class="card-dot"></div>
                 <h3>Champions Forge</h3>
-                <p>A cutthroat competitive Pokémon meta-engine and team-building simulator. Break the statistics, build unbeatable synergies, and forge god-tier rosters.</p>
+                <p>A cutthroat competitive Pokémon meta-engine and team-building simulator. Break statistics and forge god-tier rosters.</p>
                 <span class="status-tag">[ Booting Grid Engine ]</span>
             </div>
-
             <div class="toy-card" style="--card-color: var(--toy-yellow)" onclick="triggerToyEffects(event)">
                 <div class="card-dot"></div>
                 <h3>Two of Cups</h3>
-                <p>An intimate, interactive sandbox designed entirely for shared relationship experiences. Connect your nodes, spawn cooperative art modules, and map out dual dynamics.</p>
+                <p>An intimate, interactive sandbox designed entirely for shared relationship experiences. Connect your nodes.</p>
                 <span class="status-tag">[ Compiling Bond ]</span>
             </div>
-
             <div class="toy-card" id="randomCard" style="--card-color: var(--toy-blue)" onclick="triggerToyEffects(event)">
                 <div class="card-dot"></div>
                 <h3 id="randomTitle">Loading Module...</h3>
@@ -384,125 +405,157 @@
     </main>
 
     <footer>
-        &copy; 2026 Patchbox Studio. System integrity compromised. Unbox at your own risk.
+        &copy; 2026 Patchbox Studio. Security protocol enforced.
     </footer>
 
     <script>
-        // --- RANDOM MODULES GENERATOR ---
-        const randomProjects = [
-            { title: "Giga-Hertz Overlord", desc: "A chaotic audio synth tracker inside a web window. Turn keyboard commands into destructive synthesized waves.", color: "var(--toy-blue)" },
-            { title: "Echo Location OS", desc: "An alternative desktop environment navigated entirely by directional noise tracking. Turn down the lights.", color: "var(--toy-purple)" },
-            { title: "Shatter-Point Arcade", desc: "A physics-defying gravity brick sandbox that splits, multiplies, and implodes based on local coordinates.", color: "var(--accent)" },
-            { title: "Neon-Spaghetti Logic", desc: "Visual path routing puzzle sandbox where crossing wires triggers unpredictable display loops.", color: "var(--toy-pink)" },
-            { title: "Memory leak.exe", desc: "A canvas artifact generator that intentionally drags window trails across your screen into abstract matrices.", color: "var(--toy-yellow)" }
-        ];
+        // --- SAFE ANIMATION SYSTEM GLOBALS ---
+        let allowGlitches = true;
 
+        function setSensoryMode(enabled) {
+            allowGlitches = enabled;
+            const modal = document.getElementById('safetyModal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                generateNewChallenge(); // Start game engine
+            }, 400);
+        }
+
+        // --- RANDOM CARD REFRESH ENGINE ---
+        const randomProjects = [
+            { title: "Giga-Hertz Overlord", desc: "A chaotic audio synth tracker inside a web window. Turn keyboard commands into destructive waves.", color: "var(--toy-blue)" },
+            { title: "Echo Location OS", desc: "An alternative desktop environment navigated entirely by directional noise tracking.", color: "var(--toy-purple)" },
+            { title: "Shatter-Point Arcade", desc: "A physics-defying gravity brick sandbox that splits, multiplies, and implodes based on coordinates.", color: "var(--accent)" },
+            { title: "Neon-Spaghetti Logic", desc: "Visual path routing puzzle sandbox where crossing wires triggers unpredictable displays.", color: "var(--toy-pink)" }
+        ];
         const randomChoice = randomProjects[Math.floor(Math.random() * randomProjects.length)];
         document.getElementById('randomTitle').textContent = randomChoice.title;
         document.getElementById('randomDesc').textContent = randomChoice.desc;
         document.getElementById('randomCard').style.setProperty('--card-color', randomChoice.color);
 
-        // --- THEME SWAPPER ---
+        // --- THEME LIGHT / DARK TOGGLE ---
         const body = document.body;
-        const themeBtn = document.getElementById('themeBtn');
-        themeBtn.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
+        document.getElementById('themeBtn').addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
                 body.setAttribute('data-theme', 'light');
-                themeBtn.textContent = '🌙 Dark Mode';
+                document.getElementById('themeBtn').textContent = '🌙 Dark Mode';
             } else {
                 body.setAttribute('data-theme', 'dark');
-                themeBtn.textContent = '☀️ Light Mode';
+                document.getElementById('themeBtn').textContent = '☀️ Light Mode';
             }
         });
 
-        // --- BACKGROUND CANVAS PARTICLES ---
+        // --- INTERACTIVE BACKGROUND PARTICLES ---
         const canvas = document.getElementById('patchbayCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
         class Particle {
             constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 5 + 3;
+                this.x = x; this.y = y;
+                this.size = Math.random() * 5 + 2;
                 this.speedX = Math.random() * 8 - 4;
                 this.speedY = Math.random() * -6 - 3;
-                this.color = color;
-                this.alpha = 1;
+                this.color = color; this.alpha = 1;
             }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.speedY += 0.15;
-                this.alpha -= 0.015;
-            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.speedY += 0.15; this.alpha -= 0.012; }
             draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
+                ctx.save(); ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
             }
         }
-
         function triggerToyEffects(e) {
-            const card = e.currentTarget;
-            const rect = card.getBoundingClientRect();
-            const color = window.getComputedStyle(card).getPropertyValue('--card-color');
-            for(let i=0; i<25; i++) {
-                particles.push(new Particle(rect.left + rect.width / 2, rect.top + rect.height/3, color));
-            }
-            card.style.animation = 'cardShake 0.3s ease-in-out symmetric';
-            card.addEventListener('animationend', () => card.style.animation = '', {once: true});
+            const rect = e.currentTarget.getBoundingClientRect();
+            const color = window.getComputedStyle(e.currentTarget).getPropertyValue('--card-color');
+            for(let i=0; i<15; i++) particles.push(new Particle(rect.left + rect.width / 2, rect.top + rect.height/3, color));
         }
 
-        // --- INTERACTIVE CABLE PATCHING MINI-GAME ENGINE ---
+        // --- HARDWARE CRYPTOGRAPHIC LOGIC LOOP (6x6) ---
         const cableCanvas = document.getElementById('cableCanvas');
         const cCtx = cableCanvas.getContext('2d');
         const patchbay = document.querySelector('.hardware-patchbay');
-        
+        const displayScreen = document.getElementById('systemStatus');
+
+        let currentStage = 1;
+        const totalStages = 3;
         let activeNode = null;
-        let connections = {}; // format: outNodeId -> inNodeId
-        let mouseX = 0;
-        let mouseY = 0;
+        let connections = {}; // maps outId string -> inId string
+        let mouseX = 0, mouseY = 0;
 
-        function resizeCableCanvas() {
-            cableCanvas.width = patchbay.clientWidth;
-            cableCanvas.height = patchbay.clientHeight;
+        // Challenge state definitions
+        let challengeType = ""; // "DIRECT", "SHIFT", "INVERT", "BRIDGE"
+        let activeRequirements = []; // array of {out: X, in: Y} maps that must be concurrently met
+
+        const outMapLabels = { '1':'A', '2':'B', '3':'C', '4':'D', '5':'E', '6':'F' };
+        const inMapLabels = { '1':'U', '2':'V', '3':'W', '4':'X', '5':'Y', '6':'Z' };
+
+        function generateNewChallenge() {
+            connections = {};
+            document.querySelectorAll('.jack-node').forEach(n => n.classList.remove('connected'));
+            displayScreen.classList.remove('complete');
+
+            // Set up conditions based on progress depth
+            const variants = ["DIRECT", "SHIFT", "INVERT", "BRIDGE"];
+            challengeType = variants[Math.floor(Math.random() * variants.length)];
+            activeRequirements = [];
+
+            if (challengeType === "DIRECT") {
+                const o = Math.floor(Math.random() * 6) + 1;
+                const i = Math.floor(Math.random() * 6) + 1;
+                activeRequirements.push({ out: String(o), in: String(i) });
+                displayScreen.innerHTML = `STAGE ${currentStage}/${totalStages}<br>ROUTE TARGET: BANK ${outMapLabels[o]} ➔ PORT ${inMapLabels[i]}`;
+            } 
+            else if (challengeType === "SHIFT") {
+                const o = Math.floor(Math.random() * 6) + 1;
+                const shiftValue = Math.random() > 0.5 ? 1 : 2;
+                // Bound check shift value parameters
+                let targetIn = o + shiftValue;
+                if (targetIn > 6) targetIn = targetIn - 6;
+
+                activeRequirements.push({ out: String(o), in: String(targetIn) });
+                displayScreen.innerHTML = `STAGE ${currentStage}/${totalStages}<br>ROUTE TRANSPOSE: BANK ${outMapLabels[o]} ➔ [PORT IDX + ${shiftValue}]`;
+            } 
+            else if (challengeType === "INVERT") {
+                const o = Math.floor(Math.random() * 6) + 1;
+                const invertedIn = 7 - o; // Mirror across standard line axes
+
+                activeRequirements.push({ out: String(o), in: String(invertedIn) });
+                displayScreen.innerHTML = `STAGE ${currentStage}/${totalStages}<br>ROUTE OPERATOR: INVERT REFLECTION ON BANK ${outMapLabels[o]}`;
+            }
+            else if (challengeType === "BRIDGE") {
+                // Must map two wires concurrently
+                const o1 = "1", i1 = "3";
+                const o2 = "6", i2 = "4";
+                activeRequirements.push({ out: o1, in: i1 });
+                activeRequirements.push({ out: o2, in: i2 });
+                displayScreen.innerHTML = `STAGE ${currentStage}/${totalStages}<br>🚧 DUAL BRIDGE: [A ➔ W] AND [F ➔ X] SIMULTANEOUSLY`;
+            }
         }
-        window.addEventListener('resize', resizeCableCanvas);
-        resizeCableCanvas();
 
-        // Node click routing handlers
+        // Mouse routing linkage events
         document.querySelectorAll('.jack-node').forEach(node => {
             node.addEventListener('mousedown', (e) => {
+                if (currentStage > totalStages) return;
                 const type = node.getAttribute('data-type');
                 const id = node.getAttribute('data-id');
-                
+
                 if (type === 'out') {
                     activeNode = node;
-                    // Reset if already mapped out
-                    delete connections[id];
+                    if (connections[id]) {
+                        document.getElementById(`in-${connections[id]}`).classList.remove('connected');
+                        delete connections[id];
+                    }
                     node.classList.remove('connected');
-                    const targetIn = document.getElementById(`in-${id}`);
-                    if(targetIn) targetIn.classList.remove('connected');
-                    updateSystemStatus("WIRING ACTIVE...");
                 }
             });
 
             node.addEventListener('mouseup', (e) => {
                 if (activeNode) {
-                    const fromType = activeNode.getAttribute('data-type');
                     const fromId = activeNode.getAttribute('data-id');
                     const toType = node.getAttribute('data-type');
                     const toId = node.getAttribute('data-id');
@@ -511,14 +564,65 @@
                         connections[fromId] = toId;
                         activeNode.classList.add('connected');
                         node.classList.add('connected');
-                        
-                        // Check performance metrics
-                        checkSystemIntegrity();
+
+                        const outColor = window.getComputedStyle(activeNode).getPropertyValue('--node-color');
+                        node.style.setProperty('--node-color', outColor);
+
+                        verifyMatrixSolution();
                     }
                     activeNode = null;
                 }
             });
         });
+
+        function verifyMatrixSolution() {
+            // Check if every single current cryptographic criteria object matches active map
+            let stagePassed = true;
+            activeRequirements.forEach(req => {
+                if (connections[req.out] !== req.in) {
+                    stagePassed = false;
+                }
+            });
+
+            if (stagePassed) {
+                if (currentStage < totalStages) {
+                    executeSensoryFeedback("var(--toy-green)");
+                    currentStage++;
+                    setTimeout(generateNewChallenge, 700);
+                } else {
+                    currentStage++;
+                    executeCoreBreachUnlock();
+                }
+            }
+        }
+
+        function executeSensoryFeedback(color) {
+            if (!allowGlitches) return; // Cut strobe loops if requested
+            body.style.setProperty('--flash-color', color.replace(')', ', 0.12)'));
+            body.classList.add('glitch-flash');
+            setTimeout(() => body.classList.remove('glitch-flash'), 90);
+        }
+
+        function executeCoreBreachUnlock() {
+            displayScreen.classList.add('complete');
+            displayScreen.innerHTML = "🔓 SYSTEM PARADIGM DECOUPLED<br>ACCESS GRANTED";
+
+            document.getElementById('mainHeadline').innerHTML = "Welcome To The <span class='pink'>Patch</span><span class='blue'>box</span>.";
+            document.getElementById('mainDesc').innerHTML = "MATRIX SOLVED. Creative engineering hub initialization complete. All production modules fully unboxed.";
+
+            // Run explosion particle arrays safely
+            const rect = patchbay.getBoundingClientRect();
+            const maxSparks = allowGlitches ? 120 : 30; // Scale intensity down based on accessibility
+            for (let i = 0; i < maxSparks; i++) {
+                setTimeout(() => {
+                    particles.push(new Particle(
+                        rect.left + Math.random() * rect.width,
+                        rect.top + Math.random() * rect.height,
+                        Math.random() > 0.5 ? "var(--toy-pink)" : "var(--toy-yellow)"
+                    ));
+                }, i * 12);
+            }
+        }
 
         patchbay.addEventListener('mousemove', (e) => {
             const rect = patchbay.getBoundingClientRect();
@@ -526,98 +630,32 @@
             mouseY = e.clientY - rect.top;
         });
 
-        window.addEventListener('mouseup', () => {
-            if (activeNode) {
-                activeNode = null;
-                cCtx.clearRect(0,0,cableCanvas.width,cableCanvas.height);
-                updateSystemStatus("PATCH FAILED");
-            }
-        });
+        window.addEventListener('mouseup', () => { activeNode = null; });
+        function getNodeCenter(node) { return { x: node.offsetLeft + node.clientWidth / 2, y: node.offsetTop + node.clientHeight / 2 }; }
 
-        function updateSystemStatus(msg) {
-            document.getElementById('systemStatus').textContent = `STATUS: ${msg}`;
-        }
-
-        function checkSystemIntegrity() {
-            const keys = Object.keys(connections);
-            if (keys.length === 3) {
-                // Check if perfect sequence match (1->1, 2->2, 3->3)
-                if (connections['1'] === '1' && connections['2'] === '2' && connections['3'] === '3') {
-                    updateSystemStatus("CORE INTEGRITY LOCKED.");
-                    triggerSuperFlash("var(--toy-yellow)");
-                } else {
-                    updateSystemStatus("CROSS-PATCH STABLE");
-                    triggerSuperFlash("var(--toy-purple)");
-                }
-            } else {
-                updateSystemStatus(`CIRCUITS: ${keys.length}/3`);
-            }
-        }
-
-        function triggerSuperFlash(color) {
-            body.style.setProperty('--flash-color', color.replace(')', ', 0.25)'));
-            body.classList.add('glitch-flash');
-            setTimeout(() => body.classList.remove('glitch-flash'), 150);
-            
-            // Burst sparks out of everything
-            document.querySelectorAll('.jack-node').forEach(node => {
-                const rect = node.getBoundingClientRect();
-                for(let i=0; i<10; i++) {
-                    particles.push(new Particle(rect.left + rect.width/2, rect.top, color));
-                }
-            });
-        }
-
-        function getNodeCenter(node) {
-            return {
-                x: node.offsetLeft + node.clientWidth / 2,
-                y: node.offsetTop + node.clientHeight / 2
-            };
-        }
-
-        // Dedicated render animation loops
         function drawCables() {
             cCtx.clearRect(0, 0, cableCanvas.width, cableCanvas.height);
-            
-            // Draw finalized custom matrix lines
             Object.keys(connections).forEach(outId => {
                 const outNode = document.getElementById(`out-${outId}`);
                 const inNode = document.getElementById(`in-${connections[outId]}`);
                 if (outNode && inNode) {
-                    const start = getNodeCenter(outNode);
-                    const end = getNodeCenter(inNode);
-                    const color = window.getComputedStyle(outNode).getPropertyValue('--node-color');
-                    
-                    drawPhysicsWire(start, end, color);
+                    drawPhysicsWire(getNodeCenter(outNode), getNodeCenter(inNode), window.getComputedStyle(outNode).getPropertyValue('--node-color'));
                 }
             });
-
-            // Draw current active line string
             if (activeNode) {
-                const start = getNodeCenter(activeNode);
-                const end = { x: mouseX, y: mouseY };
-                const color = window.getComputedStyle(activeNode).getPropertyValue('--node-color');
-                
-                drawPhysicsWire(start, end, color);
+                drawPhysicsWire(getNodeCenter(activeNode), { x: mouseX, y: mouseY }, window.getComputedStyle(activeNode).getPropertyValue('--node-color'));
             }
-
             requestAnimationFrame(drawCables);
         }
 
         function drawPhysicsWire(start, end, color) {
-            cCtx.beginPath();
-            cCtx.moveTo(start.x, start.y);
-            
-            // Creates a hanging audio cord gravity bend arc
-            const controlX = (start.x + end.x) / 2;
-            const controlY = Math.max(start.y, end.y) + 40; 
-            
-            cCtx.quadraticCurveTo(controlX, controlY, end.x, end.y);
-            cCtx.strokeStyle = color;
-            cCtx.lineWidth = 6;
-            cCtx.lineCap = 'round';
-            cCtx.shadowBlur = 6;
-            cCtx.shadowColor = color;
+            cCtx.beginPath(); cCtx.moveTo(start.x, start.y);
+            const controlY = Math.max(start.y, end.y) + 45;
+            cCtx.quadraticCurveTo((start.x + end.x) / 2, controlY, end.x, end.y);
+            cCtx.strokeStyle = color; cCtx.lineWidth = 5; cCtx.lineCap = 'round';
+            if (allowGlitches) {
+                cCtx.shadowBlur = 6; cCtx.shadowColor = color;
+            }
             cCtx.stroke();
         }
 
@@ -628,7 +666,6 @@
             requestAnimationFrame(masterLoop);
         }
 
-        // Initialize Loops together
         masterLoop();
         drawCables();
     </script>
