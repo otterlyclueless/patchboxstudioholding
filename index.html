@@ -47,7 +47,6 @@
             transition: background-color 0.1s ease, color 0.3s ease;
         }
 
-        /* Glitch trigger class via JS */
         body.glitch-flash {
             background-color: var(--flash-color, var(--accent)) !important;
         }
@@ -64,7 +63,7 @@
 
         header, main, footer {
             position: relative;
-            z-index: 2;
+            z-index: 3;
         }
 
         header {
@@ -96,9 +95,7 @@
             transition: transform 0.1s, background-color 0.3s;
         }
 
-        .theme-toggle:active {
-            transform: scale(0.95);
-        }
+        .theme-toggle:active { transform: scale(0.95); }
 
         main {
             max-width: 1000px;
@@ -108,9 +105,7 @@
             text-align: center;
         }
 
-        .tagline-container {
-            margin-bottom: 4rem;
-        }
+        .tagline-container { margin-bottom: 3rem; }
 
         h1 {
             font-size: 4rem;
@@ -129,14 +124,109 @@
             max-width: 650px;
             margin: 0 auto;
             line-height: 1.6;
-            font-weight: 400;
         }
 
+        /* --- HARWARE INTERACTIVE GAME SYSTEM --- */
+        .hardware-patchbay {
+            background: var(--panel);
+            border: 3px solid var(--border);
+            box-shadow: 0 16px 0 var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 2rem auto 4rem auto;
+            max-width: 700px;
+            position: relative;
+            z-index: 4;
+        }
+
+        .hardware-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hardware-title {
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--toy-yellow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hardware-status-display {
+            font-family: monospace;
+            background: #000000;
+            color: #33ff33;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            box-shadow: inset 0 0 10px rgba(0,255,0,0.5);
+            min-width: 220px;
+            text-align: left;
+        }
+
+        .jack-matrix {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        .jack-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .jack-label {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .jack-node {
+            width: 44px;
+            height: 44px;
+            background: #2a2c2e;
+            border: 4px solid #4a4d50;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            box-shadow: inset 0 4px 6px rgba(0,0,0,0.6), 0 4px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+
+        .jack-node:active { transform: scale(0.95); }
+
+        .jack-node::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-25%, -25%);
+            width: 14px;
+            height: 14px;
+            background: #111;
+            border-radius: 50%;
+        }
+
+        .jack-node.connected {
+            border-color: var(--node-color, var(--accent));
+            box-shadow: 0 0 12px var(--node-color, var(--accent)), inset 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        /* --- TOY BOX GRID --- */
         .toy-box-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
-            margin-top: 3rem;
             perspective: 1000px;
         }
 
@@ -148,39 +238,30 @@
             text-align: left;
             cursor: pointer;
             position: relative;
-            transform-style: preserve-3d;
             transition: border-color 0.2s, background-color 0.3s;
             box-shadow: 0 8px 0 var(--border);
         }
 
-        /* Fun uneven startup rotations */
-        .toy-card:nth-child(1) { transform: rotateZ(-1.5deg) translateY(0); }
-        .toy-card:nth-child(2) { transform: rotateZ(1.2deg) translateY(-5px); }
-        .toy-card:nth-child(3) { transform: rotateZ(-0.8deg) translateY(5px); }
+        .toy-card:nth-child(1) { transform: rotateZ(-1deg); }
+        .toy-card:nth-child(2) { transform: rotateZ(1deg); }
+        .toy-card:nth-child(3) { transform: rotateZ(-0.5deg); }
 
         .toy-card:hover {
             border-color: var(--card-color);
             box-shadow: 0 12px 0 var(--card-color);
         }
 
-        /* Mechanical press down effect */
         .toy-card:active {
             box-shadow: 0 2px 0 var(--card-color) !important;
             transform: translateY(8px) scale(0.98) !important;
         }
 
-        /* Card Impact Shake Animations handled in JS */
         @keyframes cardShake {
-            0% { transform: translate(2px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(0px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(2px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            100% { transform: translate(0px, 0px) rotate(0deg); }
+            0%, 100% { transform: translate(0, 0); }
+            20% { transform: translate(-3px, 1px); }
+            40% { transform: translate(3px, -1px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(2px, 2px); }
         }
 
         .card-dot {
@@ -195,7 +276,6 @@
         .toy-card h3 {
             font-size: 1.4rem;
             font-weight: 800;
-            letter-spacing: -0.5px;
             margin-bottom: 0.75rem;
         }
 
@@ -211,7 +291,6 @@
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
             color: var(--card-color);
         }
 
@@ -222,7 +301,17 @@
             color: var(--text-muted);
             border-top: 2px solid var(--border);
             width: 100%;
-            font-weight: 500;
+        }
+
+        /* Dedicated patch cable drawing canvas layers */
+        #cableCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
         }
 
         @media (max-width: 850px) {
@@ -243,7 +332,31 @@
     <main>
         <div class="tagline-container">
             <h1>Part Design Studio.<br>Part Digital <span class="pink">Toy</span><span class="blue">box</span>.</h1>
-            <p class="description">We are breaking open traditional interfaces. Tinkering with highly unpredictable digital experiments, creative instruments, and dynamic worlds. Don't look directly into the logic loop.</p>
+            <p class="description">We break traditional web constraints. Route the physical logic bay below to modify core system streams.</p>
+        </div>
+
+        <div class="hardware-patchbay">
+            <canvas id="cableCanvas"></canvas>
+            <div class="hardware-header">
+                <div class="hardware-title">🕹️ Hardware Matrix V1.0</div>
+                <div class="hardware-status-display" id="systemStatus">STATUS: DISCONNECTED</div>
+            </div>
+            
+            <div class="jack-matrix">
+                <div class="jack-column">
+                    <div class="jack-label">Output Nodes</div>
+                    <div class="jack-node" id="out-1" style="--node-color: var(--toy-pink);" data-type="out" data-id="1"></div>
+                    <div class="jack-node" id="out-2" style="--node-color: var(--toy-yellow);" data-type="out" data-id="2"></div>
+                    <div class="jack-node" id="out-3" style="--node-color: var(--toy-blue);" data-type="out" data-id="3"></div>
+                </div>
+
+                <div class="jack-column">
+                    <div class="jack-label">Input Ports</div>
+                    <div class="jack-node" id="in-1" style="--node-color: var(--toy-pink);" data-type="in" data-id="1"></div>
+                    <div class="jack-node" id="in-2" style="--node-color: var(--toy-yellow);" data-type="in" data-id="2"></div>
+                    <div class="jack-node" id="in-3" style="--node-color: var(--toy-blue);" data-type="in" data-id="3"></div>
+                </div>
+            </div>
         </div>
 
         <div class="toy-box-grid">
@@ -275,56 +388,23 @@
     </footer>
 
     <script>
-        // --- 1. THE RANDOM MODULE ENGINE (7 Variants) ---
+        // --- RANDOM MODULES GENERATOR ---
         const randomProjects = [
-            {
-                title: "Giga-Hertz Overlord",
-                desc: "A chaotic audio synth tracker inside a web window. Turn keyboard commands into destructive synthesized waves and overdrive patches.",
-                color: "var(--toy-blue)"
-            },
-            {
-                title: "Echo Location OS",
-                desc: "An alternative desktop environment navigated entirely by directional noise tracking. Turn off your monitor, turn up your master output.",
-                color: "var(--toy-purple)"
-            },
-            {
-                title: "Shatter-Point Arcade",
-                desc: "A physics-defying gravity brick sandbox that splits, multiplies, and implodes based on local tracking data coordinates.",
-                color: "var(--accent)"
-            },
-            {
-                title: "Neon-Spaghetti Logic",
-                desc: "Visual path routing puzzle sandbox where crossing the wires triggers unpredictable audio loops and flashing display feeds.",
-                color: "var(--toy-pink)"
-            },
-            {
-                title: "Memory leak.exe",
-                desc: "A canvas artifact generator that intentionally drags window trails across your screen until it creates beautiful abstract design matrices.",
-                color: "var(--toy-yellow)"
-            },
-            {
-                title: "Vapor-Phase Terminal",
-                desc: "A hyper-styled text-adventure engine parsing rogue code lines from abandoned servers. Highly volatile data streams await.",
-                color: "var(--toy-purple)"
-            },
-            {
-                title: "Zero-Gravity Patchbay",
-                desc: "Float virtual dynamic audio cords around a floating geometric room to create spatial sound systems entirely out of luck.",
-                color: "var(--toy-blue)"
-            }
+            { title: "Giga-Hertz Overlord", desc: "A chaotic audio synth tracker inside a web window. Turn keyboard commands into destructive synthesized waves.", color: "var(--toy-blue)" },
+            { title: "Echo Location OS", desc: "An alternative desktop environment navigated entirely by directional noise tracking. Turn down the lights.", color: "var(--toy-purple)" },
+            { title: "Shatter-Point Arcade", desc: "A physics-defying gravity brick sandbox that splits, multiplies, and implodes based on local coordinates.", color: "var(--accent)" },
+            { title: "Neon-Spaghetti Logic", desc: "Visual path routing puzzle sandbox where crossing wires triggers unpredictable display loops.", color: "var(--toy-pink)" },
+            { title: "Memory leak.exe", desc: "A canvas artifact generator that intentionally drags window trails across your screen into abstract matrices.", color: "var(--toy-yellow)" }
         ];
 
-        // Select a random project on reload
         const randomChoice = randomProjects[Math.floor(Math.random() * randomProjects.length)];
         document.getElementById('randomTitle').textContent = randomChoice.title;
         document.getElementById('randomDesc').textContent = randomChoice.desc;
         document.getElementById('randomCard').style.setProperty('--card-color', randomChoice.color);
 
-
-        // --- 2. THEME ENGINE ---
+        // --- THEME SWAPPER ---
         const body = document.body;
         const themeBtn = document.getElementById('themeBtn');
-        
         themeBtn.addEventListener('click', () => {
             const currentTheme = body.getAttribute('data-theme');
             if (currentTheme === 'dark') {
@@ -336,8 +416,7 @@
             }
         });
 
-
-        // --- 3. CANVAS SPARK ENGINE ---
+        // --- BACKGROUND CANVAS PARTICLES ---
         const canvas = document.getElementById('patchbayCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -353,24 +432,21 @@
             constructor(x, y, color) {
                 this.x = x;
                 this.y = y;
-                this.size = Math.random() * 6 + 3;
-                this.speedX = Math.random() * 10 - 5;
-                this.speedY = Math.random() * -8 - 4; // powerful eruption upward
+                this.size = Math.random() * 5 + 3;
+                this.speedX = Math.random() * 8 - 4;
+                this.speedY = Math.random() * -6 - 3;
                 this.color = color;
                 this.alpha = 1;
-                this.gravity = 0.2;
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                this.speedY += this.gravity; 
+                this.speedY += 0.15;
                 this.alpha -= 0.015;
             }
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
-                ctx.shadowBlur = 12;
-                ctx.shadowColor = this.color;
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -379,45 +455,182 @@
             }
         }
 
-
-        // --- 4. HYPER INTERACTIVITY LOGIC ---
         function triggerToyEffects(e) {
             const card = e.currentTarget;
             const rect = card.getBoundingClientRect();
             const color = window.getComputedStyle(card).getPropertyValue('--card-color');
+            for(let i=0; i<25; i++) {
+                particles.push(new Particle(rect.left + rect.width / 2, rect.top + rect.height/3, color));
+            }
+            card.style.animation = 'cardShake 0.3s ease-in-out symmetric';
+            card.addEventListener('animationend', () => card.style.animation = '', {once: true});
+        }
+
+        // --- INTERACTIVE CABLE PATCHING MINI-GAME ENGINE ---
+        const cableCanvas = document.getElementById('cableCanvas');
+        const cCtx = cableCanvas.getContext('2d');
+        const patchbay = document.querySelector('.hardware-patchbay');
+        
+        let activeNode = null;
+        let connections = {}; // format: outNodeId -> inNodeId
+        let mouseX = 0;
+        let mouseY = 0;
+
+        function resizeCableCanvas() {
+            cableCanvas.width = patchbay.clientWidth;
+            cableCanvas.height = patchbay.clientHeight;
+        }
+        window.addEventListener('resize', resizeCableCanvas);
+        resizeCableCanvas();
+
+        // Node click routing handlers
+        document.querySelectorAll('.jack-node').forEach(node => {
+            node.addEventListener('mousedown', (e) => {
+                const type = node.getAttribute('data-type');
+                const id = node.getAttribute('data-id');
+                
+                if (type === 'out') {
+                    activeNode = node;
+                    // Reset if already mapped out
+                    delete connections[id];
+                    node.classList.remove('connected');
+                    const targetIn = document.getElementById(`in-${id}`);
+                    if(targetIn) targetIn.classList.remove('connected');
+                    updateSystemStatus("WIRING ACTIVE...");
+                }
+            });
+
+            node.addEventListener('mouseup', (e) => {
+                if (activeNode) {
+                    const fromType = activeNode.getAttribute('data-type');
+                    const fromId = activeNode.getAttribute('data-id');
+                    const toType = node.getAttribute('data-type');
+                    const toId = node.getAttribute('data-id');
+
+                    if (toType === 'in') {
+                        connections[fromId] = toId;
+                        activeNode.classList.add('connected');
+                        node.classList.add('connected');
+                        
+                        // Check performance metrics
+                        checkSystemIntegrity();
+                    }
+                    activeNode = null;
+                }
+            });
+        });
+
+        patchbay.addEventListener('mousemove', (e) => {
+            const rect = patchbay.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (activeNode) {
+                activeNode = null;
+                cCtx.clearRect(0,0,cableCanvas.width,cableCanvas.height);
+                updateSystemStatus("PATCH FAILED");
+            }
+        });
+
+        function updateSystemStatus(msg) {
+            document.getElementById('systemStatus').textContent = `STATUS: ${msg}`;
+        }
+
+        function checkSystemIntegrity() {
+            const keys = Object.keys(connections);
+            if (keys.length === 3) {
+                // Check if perfect sequence match (1->1, 2->2, 3->3)
+                if (connections['1'] === '1' && connections['2'] === '2' && connections['3'] === '3') {
+                    updateSystemStatus("CORE INTEGRITY LOCKED.");
+                    triggerSuperFlash("var(--toy-yellow)");
+                } else {
+                    updateSystemStatus("CROSS-PATCH STABLE");
+                    triggerSuperFlash("var(--toy-purple)");
+                }
+            } else {
+                updateSystemStatus(`CIRCUITS: ${keys.length}/3`);
+            }
+        }
+
+        function triggerSuperFlash(color) {
+            body.style.setProperty('--flash-color', color.replace(')', ', 0.25)'));
+            body.classList.add('glitch-flash');
+            setTimeout(() => body.classList.remove('glitch-flash'), 150);
             
-            // Effect A: Spawn 35 heavy explosive sparks
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 3;
-            for(let i=0; i<35; i++) {
-                particles.push(new Particle(centerX, centerY, color));
+            // Burst sparks out of everything
+            document.querySelectorAll('.jack-node').forEach(node => {
+                const rect = node.getBoundingClientRect();
+                for(let i=0; i<10; i++) {
+                    particles.push(new Particle(rect.left + rect.width/2, rect.top, color));
+                }
+            });
+        }
+
+        function getNodeCenter(node) {
+            return {
+                x: node.offsetLeft + node.clientWidth / 2,
+                y: node.offsetTop + node.clientHeight / 2
+            };
+        }
+
+        // Dedicated render animation loops
+        function drawCables() {
+            cCtx.clearRect(0, 0, cableCanvas.width, cableCanvas.height);
+            
+            // Draw finalized custom matrix lines
+            Object.keys(connections).forEach(outId => {
+                const outNode = document.getElementById(`out-${outId}`);
+                const inNode = document.getElementById(`in-${connections[outId]}`);
+                if (outNode && inNode) {
+                    const start = getNodeCenter(outNode);
+                    const end = getNodeCenter(inNode);
+                    const color = window.getComputedStyle(outNode).getPropertyValue('--node-color');
+                    
+                    drawPhysicsWire(start, end, color);
+                }
+            });
+
+            // Draw current active line string
+            if (activeNode) {
+                const start = getNodeCenter(activeNode);
+                const end = { x: mouseX, y: mouseY };
+                const color = window.getComputedStyle(activeNode).getPropertyValue('--node-color');
+                
+                drawPhysicsWire(start, end, color);
             }
 
-            // Effect B: Mechanical Card Vibration Shake
-            card.style.animation = 'cardShake 0.4s cubic-bezier(.36,.07,.19,.97) both';
-            card.addEventListener('animationend', () => {
-                card.style.animation = '';
-            }, {once: true});
-
-            // Effect C: Digital Glitch Flash of background
-            body.style.setProperty('--flash-color', color.replace(')', ', 0.15)')); // create transparent tint
-            body.classList.add('glitch-flash');
-            setTimeout(() => {
-                body.classList.remove('glitch-flash');
-            }, 80);
+            requestAnimationFrame(drawCables);
         }
 
-        // Constant render loop
-        function animate() {
+        function drawPhysicsWire(start, end, color) {
+            cCtx.beginPath();
+            cCtx.moveTo(start.x, start.y);
+            
+            // Creates a hanging audio cord gravity bend arc
+            const controlX = (start.x + end.x) / 2;
+            const controlY = Math.max(start.y, end.y) + 40; 
+            
+            cCtx.quadraticCurveTo(controlX, controlY, end.x, end.y);
+            cCtx.strokeStyle = color;
+            cCtx.lineWidth = 6;
+            cCtx.lineCap = 'round';
+            cCtx.shadowBlur = 6;
+            cCtx.shadowColor = color;
+            cCtx.stroke();
+        }
+
+        function masterLoop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles = particles.filter(p => p.alpha > 0);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animate);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(masterLoop);
         }
-        animate();
+
+        // Initialize Loops together
+        masterLoop();
+        drawCables();
     </script>
 </body>
 </html>
