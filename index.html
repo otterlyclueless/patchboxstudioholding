@@ -14,6 +14,7 @@
             --toy-pink: #FF99C8;
             --toy-blue: #A9DEF9;
             --toy-yellow: #E4FF1A;
+            --toy-purple: #CC99FF;
             --border: rgba(255, 255, 255, 0.1);
         }
 
@@ -31,7 +32,7 @@
             margin: 0;
             padding: 0;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            user-select: none;
         }
 
         body {
@@ -43,6 +44,12 @@
             justify-content: space-between;
             overflow-x: hidden;
             position: relative;
+            transition: background-color 0.1s ease, color 0.3s ease;
+        }
+
+        /* Glitch trigger class via JS */
+        body.glitch-flash {
+            background-color: var(--flash-color, var(--accent)) !important;
         }
 
         canvas {
@@ -71,29 +78,30 @@
         }
 
         .logo {
-            font-weight: 800;
-            font-size: 1.25rem;
-            letter-spacing: -0.5px;
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+            text-transform: uppercase;
         }
 
         .theme-toggle {
             background: var(--panel);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
             color: var(--text);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.85rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.1s, background-color 0.3s;
         }
 
-        .theme-toggle:hover {
-            transform: translateY(-1px);
+        .theme-toggle:active {
+            transform: scale(0.95);
         }
 
         main {
-            max-width: 800px;
+            max-width: 1000px;
             width: 100%;
             margin: auto;
             padding: 2rem;
@@ -101,86 +109,124 @@
         }
 
         .tagline-container {
-            margin-bottom: 2.5rem;
+            margin-bottom: 4rem;
         }
 
         h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -2px;
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2.5px;
             margin-bottom: 1.5rem;
         }
 
-        h1 span.accent { color: var(--accent); }
-        h1 span.pink { color: var(--toy-pink); }
-        h1 span.blue { color: var(--toy-blue); }
+        h1 span.pink { color: var(--toy-pink); text-shadow: 0 0 15px rgba(255,153,200,0.3); }
+        h1 span.blue { color: var(--toy-blue); text-shadow: 0 0 15px rgba(169,222,249,0.3); }
 
         p.description {
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             color: var(--text-muted);
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-weight: 400;
         }
 
         .toy-box-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            gap: 2rem;
             margin-top: 3rem;
+            perspective: 1000px;
         }
 
         .toy-card {
             background: var(--panel);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
+            border: 3px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
             text-align: left;
             cursor: pointer;
             position: relative;
-            transform: rotate(var(--r, 0deg));
+            transform-style: preserve-3d;
+            transition: border-color 0.2s, background-color 0.3s;
+            box-shadow: 0 8px 0 var(--border);
         }
 
-        .toy-card:nth-child(1) { --r: -1deg; }
-        .toy-card:nth-child(2) { --r: 1.5deg; }
-        .toy-card:nth-child(3) { --r: -0.5deg; }
+        /* Fun uneven startup rotations */
+        .toy-card:nth-child(1) { transform: rotateZ(-1.5deg) translateY(0); }
+        .toy-card:nth-child(2) { transform: rotateZ(1.2deg) translateY(-5px); }
+        .toy-card:nth-child(3) { transform: rotateZ(-0.8deg) translateY(5px); }
 
         .toy-card:hover {
-            transform: scale(1.03) rotate(0deg);
             border-color: var(--card-color);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 12px 0 var(--card-color);
+        }
+
+        /* Mechanical press down effect */
+        .toy-card:active {
+            box-shadow: 0 2px 0 var(--card-color) !important;
+            transform: translateY(8px) scale(0.98) !important;
+        }
+
+        /* Card Impact Shake Animations handled in JS */
+        @keyframes cardShake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
         }
 
         .card-dot {
-            width: 12px;
-            height: 12px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             background: var(--card-color);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 10px var(--card-color);
         }
 
         .toy-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.75rem;
         }
 
         .toy-card p {
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .toy-card .status-tag {
+            display: inline-block;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--card-color);
         }
 
         footer {
-            padding: 2rem;
+            padding: 2.5rem;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
-            border-top: 1px solid var(--border);
+            border-top: 2px solid var(--border);
             width: 100%;
+            font-weight: 500;
         }
 
-        @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
+        @media (max-width: 850px) {
+            h1 { font-size: 2.8rem; }
             .toy-box-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -190,41 +236,92 @@
     <canvas id="patchbayCanvas"></canvas>
 
     <header>
-        <div class="logo">Patchbox Studio</div>
+        <div class="logo">Patchbox.Studio</div>
         <button class="theme-toggle" id="themeBtn">☀️ Light Mode</button>
     </header>
 
     <main>
         <div class="tagline-container">
-            <h1 id="headline">Part Design Studio.<br>Part Digital <span class="pink">Toy</span><span class="blue">box</span>.</h1>
-            <p class="description">We are wiring up creative systems, interactive experiments, and tactical digital play. Something highly volatile is coming soon.</p>
+            <h1>Part Design Studio.<br>Part Digital <span class="pink">Toy</span><span class="blue">box</span>.</h1>
+            <p class="description">We are breaking open traditional interfaces. Tinkering with highly unpredictable digital experiments, creative instruments, and dynamic worlds. Don't look directly into the logic loop.</p>
         </div>
 
         <div class="toy-box-grid">
-            <div class="toy-card" style="--card-color: var(--toy-pink)" onclick="spawnSparks(event)">
+            <div class="toy-card" style="--card-color: var(--toy-pink)" onclick="triggerToyEffects(event)">
                 <div class="card-dot"></div>
                 <h3>Champions Forge</h3>
-                <p>Click to initialize interactive grid engine patch.</p>
+                <p>A cutthroat competitive Pokémon meta-engine and team-building simulator. Break the statistics, build unbeatable synergies, and forge god-tier rosters.</p>
+                <span class="status-tag">[ Booting Grid Engine ]</span>
             </div>
-            <div class="toy-card" style="--card-color: var(--toy-yellow)" onclick="spawnSparks(event)">
+
+            <div class="toy-card" style="--card-color: var(--toy-yellow)" onclick="triggerToyEffects(event)">
                 <div class="card-dot"></div>
                 <h3>Two of Cups</h3>
-                <p>Tap to generate random generative art modules.</p>
+                <p>An intimate, interactive sandbox designed entirely for shared relationship experiences. Connect your nodes, spawn cooperative art modules, and map out dual dynamics.</p>
+                <span class="status-tag">[ Compiling Bond ]</span>
             </div>
-            <div class="toy-card" style="--card-color: var(--toy-blue)" onclick="spawnSparks(event)">
+
+            <div class="toy-card" id="randomCard" style="--card-color: var(--toy-blue)" onclick="triggerToyEffects(event)">
                 <div class="card-dot"></div>
-                <h3>RAW OS</h3>
-                <p>Boot alternative architectural interface sandbox.</p>
+                <h3 id="randomTitle">Loading Module...</h3>
+                <p id="randomDesc">Connecting to remote experiment terminal allocation protocol.</p>
+                <span class="status-tag">[ Intercepting Feed ]</span>
             </div>
         </div>
     </main>
 
     <footer>
-        &copy; 2026 Patchbox Studio. Out of the box, into the stream.
+        &copy; 2026 Patchbox Studio. System integrity compromised. Unbox at your own risk.
     </footer>
 
     <script>
-        // Theme Switching Engine
+        // --- 1. THE RANDOM MODULE ENGINE (7 Variants) ---
+        const randomProjects = [
+            {
+                title: "Giga-Hertz Overlord",
+                desc: "A chaotic audio synth tracker inside a web window. Turn keyboard commands into destructive synthesized waves and overdrive patches.",
+                color: "var(--toy-blue)"
+            },
+            {
+                title: "Echo Location OS",
+                desc: "An alternative desktop environment navigated entirely by directional noise tracking. Turn off your monitor, turn up your master output.",
+                color: "var(--toy-purple)"
+            },
+            {
+                title: "Shatter-Point Arcade",
+                desc: "A physics-defying gravity brick sandbox that splits, multiplies, and implodes based on local tracking data coordinates.",
+                color: "var(--accent)"
+            },
+            {
+                title: "Neon-Spaghetti Logic",
+                desc: "Visual path routing puzzle sandbox where crossing the wires triggers unpredictable audio loops and flashing display feeds.",
+                color: "var(--toy-pink)"
+            },
+            {
+                title: "Memory leak.exe",
+                desc: "A canvas artifact generator that intentionally drags window trails across your screen until it creates beautiful abstract design matrices.",
+                color: "var(--toy-yellow)"
+            },
+            {
+                title: "Vapor-Phase Terminal",
+                desc: "A hyper-styled text-adventure engine parsing rogue code lines from abandoned servers. Highly volatile data streams await.",
+                color: "var(--toy-purple)"
+            },
+            {
+                title: "Zero-Gravity Patchbay",
+                desc: "Float virtual dynamic audio cords around a floating geometric room to create spatial sound systems entirely out of luck.",
+                color: "var(--toy-blue)"
+            }
+        ];
+
+        // Select a random project on reload
+        const randomChoice = randomProjects[Math.floor(Math.random() * randomProjects.length)];
+        document.getElementById('randomTitle').textContent = randomChoice.title;
+        document.getElementById('randomDesc').textContent = randomChoice.desc;
+        document.getElementById('randomCard').style.setProperty('--card-color', randomChoice.color);
+
+
+        // --- 2. THEME ENGINE ---
         const body = document.body;
         const themeBtn = document.getElementById('themeBtn');
         
@@ -239,7 +336,8 @@
             }
         });
 
-        // Interactive "Toybox" Background Sparks Canvas
+
+        // --- 3. CANVAS SPARK ENGINE ---
         const canvas = document.getElementById('patchbayCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -255,21 +353,24 @@
             constructor(x, y, color) {
                 this.x = x;
                 this.y = y;
-                this.size = Math.random() * 4 + 2;
-                this.speedX = Math.random() * 6 - 3;
-                this.speedY = Math.random() * -5 - 2;
+                this.size = Math.random() * 6 + 3;
+                this.speedX = Math.random() * 10 - 5;
+                this.speedY = Math.random() * -8 - 4; // powerful eruption upward
                 this.color = color;
                 this.alpha = 1;
+                this.gravity = 0.2;
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                this.speedY += 0.1; // gravity vibe
-                this.alpha -= 0.02;
+                this.speedY += this.gravity; 
+                this.alpha -= 0.015;
             }
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = this.color;
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -278,14 +379,35 @@
             }
         }
 
-        function spawnSparks(e) {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const color = window.getComputedStyle(e.currentTarget).getPropertyValue('--card-color');
-            for(let i=0; i<15; i++) {
-                particles.push(new Particle(rect.left + rect.width/2, rect.top, color));
+
+        // --- 4. HYPER INTERACTIVITY LOGIC ---
+        function triggerToyEffects(e) {
+            const card = e.currentTarget;
+            const rect = card.getBoundingClientRect();
+            const color = window.getComputedStyle(card).getPropertyValue('--card-color');
+            
+            // Effect A: Spawn 35 heavy explosive sparks
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 3;
+            for(let i=0; i<35; i++) {
+                particles.push(new Particle(centerX, centerY, color));
             }
+
+            // Effect B: Mechanical Card Vibration Shake
+            card.style.animation = 'cardShake 0.4s cubic-bezier(.36,.07,.19,.97) both';
+            card.addEventListener('animationend', () => {
+                card.style.animation = '';
+            }, {once: true});
+
+            // Effect C: Digital Glitch Flash of background
+            body.style.setProperty('--flash-color', color.replace(')', ', 0.15)')); // create transparent tint
+            body.classList.add('glitch-flash');
+            setTimeout(() => {
+                body.classList.remove('glitch-flash');
+            }, 80);
         }
 
+        // Constant render loop
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles = particles.filter(p => p.alpha > 0);
